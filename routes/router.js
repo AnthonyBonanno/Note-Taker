@@ -1,9 +1,8 @@
 const notes = require('express').Router();
 
 // Import our files containing our routes
-const feedbackRouter = require('./feedback');
-const tipsRouter = require('./tips');
+const notesRouter = require('./notes');
 
-notes.use('/router', router);
+notes.use('/notes', notesRouter);
 
 module.exports = notes;
