@@ -1,23 +1,37 @@
-const notes = require('express').Router();
 const fs = require('fs');
+const notes = require('express').Router();
+
 
 // GET db.json so that the notes can be retrieved -- GET request has no body
-app.get('/api/notes', (req, res) => res.json());
+notes.get('/', (req, res) => {
+  fs.readFile('db/db.json', 'utf8', (err, data) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json(err);
+    } else {
+      res.status(200).json(JSON.parse(data));
+    }
+  })
+});
 
 // POST -- POST request has a body
-app.post('/api/notes', (req, res) => {
+notes.post('/', (req, res) => {
 
-  fs.readFile(path.join(__dirname, '/db/db.json'), (err, data) => {
+  fs.readFile(('db/db.json'), (err, data) => {
     if (err) {
       console.log(err)
     } else {
       const parsedData = JSON.parse(data)
       parsedData.push(req.body)
+
+      fs.writeFile(('db/db.json'), JSON.stringify(parsedData), (err) => {
+        res.json('Successfully saved note!')
+      });
     };
 
-    fs.writeFile(path.join(__dirname, '/db/db.json'), JSON.stringify(parsedData), (err) => {
-      res.json('Successfully saved note!')
-    });
+
   });
 
 });
+
+module.exports = notes;
