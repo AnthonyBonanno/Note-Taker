@@ -1,5 +1,5 @@
-const fs = require('fs');
 const notes = require('express').Router();
+const fs = require('fs');
 
 // GET db.json so that the notes can be retrieved -- GET request has no body
 app.get('/api/notes', (req, res) => res.json());
