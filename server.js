@@ -1,32 +1,18 @@
 const express = require('express');
 const path = require('path');
-const notesData = require('./db/db.json');
-const fs = require('fs');
+const api = require('./routes/notes');
 
 const PORT = 3001
 
 const app = express();
 
-// Middleware for parsing JSON and urlencoded form data
+// Middleware for parsing JSON and urlencoded form data, as well as serving up static assets from the public folder
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// GET db.json so that the notes can be retrieved
-app.get('/api/notes', (req, res) => res.json());
-
-// POST 
-app.post('/api/notes', (req, res) => {
-  console.log(__dirname, '/db/db.json');
-  fs.readFile(path.join(__dirname, '/db/db.json'), (err, data) => {
-    const parsedData = JSON.parse(data)
-    parsedData.push(req.body)
-    fs.writeFile(path.join(__dirname, '/db/db.json'), JSON.stringify(parsedData), (err) => {
-      res.json('Successfully saved note!')
-    });
-  });
-
-});
+// Send all the requests that begin with /api to the index.js file
+app.use('/api', api);
 
 // GET Route for notes page
 app.get('/notes', (req, res) =>
